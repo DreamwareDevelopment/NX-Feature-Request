@@ -1,0 +1,52 @@
+{
+  "name": "Lib-A",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "Lib-A/src",
+  "projectType": "library",
+  "targets": {
+    "command": {
+      "executor": "@nx/workspace:run-commands",
+      "configurations": {
+        "development": {
+          "commands": ["echo \"Lib-A Development\""]
+        },
+        "production": {
+          "commands": ["echo \"Lib-A Production\""]
+        }
+      }
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/Lib-A",
+        "main": "Lib-A/src/index.ts",
+        "tsConfig": "Lib-A/tsconfig.lib.json",
+        "assets": ["Lib-A/*.md"]
+      },
+      "configurations": {
+        "production": {
+          "dependsOn": ["command:production"]
+        },
+        "development": {
+          "dependsOn": ["command:development"]
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["Lib-A/**/*.ts", "Lib-A/package.json"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "Lib-A/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
